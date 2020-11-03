@@ -233,3 +233,64 @@ join payroll p
 on p.employeeID= e.id
 group by e.gender;
 
+alter table employee
+alter column gender varchar(2)
+
+
+use employee_payroll
+
+alter procedure spAddEmployeeDetails
+(@EmployeeName varchar(255),
+@phoneNumber bigint,
+@Address varchar(255),
+@Gender varchar(2),
+@start datetime,
+@companyId int
+) as
+begin
+insert into  employee(name,phone_number,address,gender,company_id,start)
+values
+(@employeename,@phonenumber,@address,@gender,@companyId,@start)
+end
+select * from employee;
+
+use employee_payroll
+
+select * from payroll;
+
+alter table payroll
+add salary_id int primary key identity(1,1);
+
+alter table payroll
+drop constraint PK__payroll__C134C9A1E4732343
+
+alter table payroll
+drop column employeeid;
+
+alter table payroll
+add constraint uniqueColumns Unique(basepay,deductions,taxable_pay,tax,netPay,salary_id);
+
+alter table employee
+add salaryid int foreign key references payroll(salary_id)
+
+update employee
+set salaryid=1
+where name='kohli' or name='Akshay';
+select * from employee;
+update employee
+set salaryid=2
+where name='dhoni' or name='Akshay';
+select * from employee;
+update employee
+set salaryid=3
+where name='Rohit' or name='Akshay';
+select * from employee;
+
+alter table employeedepartment
+add constraint foreignKey1 foreign key(departmentID) references departments(departmentID);
+
+alter table employeedepartment
+add constraint foreignKey2 foreign key(employeeID) references employee(ID);
+
+alter table employee
+add constraint foreignkey3 foreign key(company_id) references company(company_id);
